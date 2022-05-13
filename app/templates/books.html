@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteka książek</title>
+    <style>
+        table, th, tr, td {border: 2px solid black;}
+    </style>
+</head>
+
+
+<body>
+
+<h2>Lista książek: </h2>
+<table>
+    <thead>
+    <th>Lp</th>
+    <th>Tytuł</th>
+    <th>Opis</th>
+    <th>Status</th>
+    </thead>
+{% for book in allbook %}
+    <tr>
+        <td>{{ book.bookl.id }}</td>
+        <td><a href="/book/{{ book.bookl.id }}">{{ book.bookl.title }}</a></td>
+        <td>{{ book.bookl.description }}</td>
+        <td>{{ book.status }}</td>
+    </tr>
+{% endfor %}
+</table>
+<h2><a href="/addbook/">  Dodaj nową książkę!</a></h2>
+
+<h2>Lista autorów: </h2>
+<table>
+    <thead>
+    <th>Lp</th>
+    <th>Imię</th>
+    <th>Nazwisko</th>
+    <th>Tytuł książki</th>
+    </thead>
+{% for author in allauthor %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td><a href="/author/{{ author.author_id }}">{{ author.author.firstname }}</a></td>
+        <td>{{ author.author.surname }}</td>
+        <td>{{ author.booka.title }}</td>
+    </tr>
+{% endfor %}
+</table>
+<h2><a href="/addauthor/">  Dodaj nowego autora!</a></h2>
+
+</body>
+</html>
+

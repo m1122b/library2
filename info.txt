@@ -1,0 +1,118 @@
+
+mkdir mikroblog
+cd mikroblog
+
+python -m venv venv
+
+Scripts\activate
+
+pip install -r requirements.txt # instalowanie z pliku
+pip freeze > requirements.txt # ściąganie do pliku informacji o zainstalowanych modułach
+
+
+mkdir app
+
+type nul > __init__.py
+
+
+flask db init                        #Tworzy strukturę potrzebną dla migracji. Wykonujemy to tylko raz – na początku.
+flask db migrate -m "users table"    #Tworzy migracje, ale nie nanosi zmian na bazę danych.
+flask db upgrade                     #Wprowadzenie zmiany opisane w migracji do bazy danych.
+flask db downgrade                   #Cofnięcie zmian.
+
+flask db migrate -m "posts table and relation to users"
+flask db upgrade
+
+
+pip install flask-shell-ipython
+
+flask shell
+
+"
+In [1]: db
+Out[1]: <SQLAlchemy engine=sqlite:////Users/kodilla/mikroblog/mikroblog/mikroblog.db>
+
+In [2]: User
+Out[2]: app.models.User
+
+In [3]: Post
+Out[3]: app.models.Post
+
+In [5]: u = User(username="Eric", email="eric@idle.xx")
+
+In [6]: db.session.add(u)
+
+In [7]: db.session.commit()
+
+
+In [11]: users = User.query.all()
+
+In [12]: users
+Out[12]: [<User 1>, <User 2>]
+
+In [13]: User.query.first()
+Out[13]: <User 1>
+
+In [16]: User.query.get(2)
+Out[16]: <User 2>
+
+In [17]: u = User.query.get(2)
+
+In [18]: post = Post(body="Programuj!!", author=u)
+
+In [19]: db.session.add(post)
+
+In [20]: db.session.commit()
+
+In [21]: u = User.query.get(2)
+
+In [22]: u.posts.all()
+Out[22]: [<Post 1>]
+
+In [23]: for post in u.posts.all():
+   ...:     print(post)
+   ...:
+<Post 1 Programuj!! ...>
+
+
+
+In [1]: post = Post.query.first()
+
+In [2]: post
+Out[2]: <Post 1>
+
+In [3]: str(post)
+Out[3]: '<Post 1 Programuj!! ...>'
+
+In [5]: post.body = "Programuj z Kodillą!!"
+
+In [6]: db.session.add(post)
+
+In [7]: db.session.commit()
+
+In [8]: post = Post.query.get(1)
+
+In [9]: post.body
+Out[9]: 'Programuj z Kodillą!!'
+
+
+
+In [1]: users = User.query.all()
+
+In [2]: for u in users:
+   ...:     db.session.delete(u)
+   ...:
+
+In [3]: posts = Post.query.all()
+
+In [4]: posts[0].author
+
+In [5]: for p in posts:
+   ...:     db.session.delete(p)
+   ...:
+
+In [6]: db.session.commit()
+
+
+"
+
